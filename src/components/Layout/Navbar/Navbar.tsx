@@ -14,12 +14,10 @@ import { Box } from "@mui/system";
 import MenuIcon from "@mui/icons-material/Menu";
 import React from "react";
 import { Links, Toolbar } from "./styles";
-import { Link } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  const navItems = ["Home", "About", "Contact"];
   const drawerWidth = 240;
 
   const handleDrawerToggle = () => {

@@ -1,5 +1,8 @@
-import { Box, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Fab, Tab, Tabs, Typography } from "@mui/material";
 import React from "react";
+import useFetch from "../../hooks/useFetch";
+import CardReservation from "../CardReservation/CardReservation";
+import AddIcon from "@mui/icons-material/Add";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -44,6 +47,14 @@ const ReservationsSection = () => {
     setValue(newValue);
   };
 
+  const { data: pendient } = useFetch(
+    "http://localhost:4000/reservations/pendient"
+  );
+
+  const { data: denay } = useFetch(
+    "http://localhost:4000/reservations/denay"
+  );
+
   return (
     <Box sx={{ width: "100%" }} mt={2}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -57,10 +68,64 @@ const ReservationsSection = () => {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        Pendientes
+        <Box display='flex' gap={3} flexWrap='wrap'>
+          {pendient.map((item) => {
+            return (
+              <CardReservation
+                clientName={item["client_name"]}
+                hotel={item["hotel"]}
+                adults_count={item["adults_count"]}
+                child_count={item["child_count"]}
+                inf_count={item["inf_count"]}
+                entry_date={item["entry_date"]}
+                exit_date={item["exit_date"]}
+                bedroom_type={item["bedroom_type"]}
+                denayPendient={true}
+              />
+            );
+          })}
+          <Fab
+            color='primary'
+            aria-label='add'
+            sx={{
+              position: "fixed",
+              bottom: 40,
+              right: 40,
+            }}
+          >
+            <AddIcon />
+          </Fab>
+        </Box>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Denegadas
+        <Box display='flex' gap={3} flexWrap='wrap'>
+          {denay.map((item) => {
+            return (
+              <CardReservation
+                clientName={item["client_name"]}
+                hotel={item["hotel"]}
+                adults_count={item["adults_count"]}
+                child_count={item["child_count"]}
+                inf_count={item["inf_count"]}
+                entry_date={item["entry_date"]}
+                exit_date={item["exit_date"]}
+                bedroom_type={item["bedroom_type"]}
+                denayPendient={true}
+              />
+            );
+          })}
+          <Fab
+            color='primary'
+            aria-label='add'
+            sx={{
+              position: "fixed",
+              bottom: 40,
+              right: 40,
+            }}
+          >
+            <AddIcon />
+          </Fab>
+        </Box>
       </TabPanel>
     </Box>
   );
