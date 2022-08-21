@@ -1,13 +1,20 @@
 const express = require("express");
-const morgan = require("morgan");
-
-const offertsRoutes = require("./routes/reservations.routes");
 
 const app = express();
 
+const offertsRoutes = require("./routes/reservations.routes");
+
 //midelware
+
+app.use(express.json());
 
 app.use(offertsRoutes);
 
+app.use((err, req, res, next) => {
+  return res.json({
+    message: err.message,
+  });
+});
+
 app.listen(4000);
-console.log("express en el 4000");
+console.log("todo en talla");
