@@ -9,6 +9,28 @@ const getAllReservations = async (_req, res, next) => {
   }
 };
 
+const getPendientReservations = async (_requ, res, next) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM reservations WHERE pendient = true"
+    );
+    res.json(result.rows);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getDenayReservations = async (_requ, res, next) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM reservations WHERE denay = true"
+    );
+    res.json(result.rows);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const createReservation = async (req, res, next) => {
   const { client_name, booking } = req.body;
 
@@ -53,6 +75,8 @@ const updateReservation = async (req, res, next) => {
 
 module.exports = {
   getAllReservations,
+  getPendientReservations,
+  getDenayReservations,
   createReservation,
   deleteReservation,
   updateReservation,
