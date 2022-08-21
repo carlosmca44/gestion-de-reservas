@@ -32,12 +32,30 @@ const getDenayReservations = async (_requ, res, next) => {
 };
 
 const createReservation = async (req, res, next) => {
-  const { client_name, booking } = req.body;
+  const {
+    client_name,
+    hotel,
+    adults_count,
+    child_count,
+    inf_count,
+    entry_date,
+    exit_date,
+    bedroom_type,
+  } = req.body;
 
   try {
     await pool.query(
-      "INSERT INTO reservations (client_name, booking) VALUES ($1, $2)",
-      [client_name, booking]
+      "INSERT INTO reservations (client_name, hotel, adults_count, child_count, inf_count, entry_date, exit_date, bedroom_type) VALUES ($1, $2, $3, $4, $5, $6 ,$7 ,$8)",
+      [
+        client_name,
+        hotel,
+        adults_count,
+        child_count,
+        inf_count,
+        entry_date,
+        exit_date,
+        bedroom_type,
+      ]
     );
     res.send("reservacion insertada");
   } catch (error) {
