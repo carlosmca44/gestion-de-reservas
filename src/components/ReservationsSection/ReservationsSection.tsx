@@ -1,8 +1,8 @@
-import { Box, Fab, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Tab, Tabs, Typography } from "@mui/material";
 import React from "react";
 import useFetch from "../../hooks/useFetch";
 import CardReservation from "../CardReservation/CardReservation";
-import AddIcon from "@mui/icons-material/Add";
+import ReservationForm from "./ReservationForm/ReservationForm";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -84,17 +84,7 @@ const ReservationsSection = () => {
               />
             );
           })}
-          <Fab
-            color='primary'
-            aria-label='add'
-            sx={{
-              position: "fixed",
-              bottom: 40,
-              right: 40,
-            }}
-          >
-            <AddIcon />
-          </Fab>
+          <ReservationForm />
         </Box>
       </TabPanel>
       <TabPanel value={value} index={1}>
@@ -114,17 +104,6 @@ const ReservationsSection = () => {
               />
             );
           })}
-          <Fab
-            color='primary'
-            aria-label='add'
-            sx={{
-              position: "fixed",
-              bottom: 40,
-              right: 40,
-            }}
-          >
-            <AddIcon />
-          </Fab>
         </Box>
       </TabPanel>
     </Box>

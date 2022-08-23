@@ -34,7 +34,7 @@ const CardReservation: React.FC<CardReservationProps> = ({
   return (
     <Card sx={{ minWidth: 275, maxWidth: 300 }}>
       <CardHeader title={clientName} />
-      <CardContent>
+      <CardContent sx={{ textAlign: "center" }}>
         <Typography variant='h6'>{hotel}</Typography>
         <Typography variant='h6'>Adultos: {adults_count}</Typography>
         <Typography variant='h6'>Niños: {child_count}</Typography>
