@@ -40,12 +40,14 @@ const createReservation = async (req, res, next) => {
     inf_count,
     entry_date,
     exit_date,
-    bedroom_type,
+    double_rooms,
+    simple_rooms,
+    triple_rooms,
   } = req.body;
 
   try {
     await pool.query(
-      "INSERT INTO reservations (client_name, hotel, adults_count, child_count, inf_count, entry_date, exit_date, bedroom_type) VALUES ($1, $2, $3, $4, $5, $6 ,$7 ,$8)",
+      "INSERT INTO reservations (client_name, hotel, adults_count, child_count, inf_count, entry_date, exit_date, double_rooms, simple_rooms, triple_rooms) VALUES ($1, $2, $3, $4, $5, $6 ,$7 ,$8, $9, $10)",
       [
         client_name,
         hotel,
@@ -54,7 +56,9 @@ const createReservation = async (req, res, next) => {
         inf_count,
         entry_date,
         exit_date,
-        bedroom_type,
+        double_rooms,
+        simple_rooms,
+        triple_rooms,
       ]
     );
     res.send("reservacion insertada");

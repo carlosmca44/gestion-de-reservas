@@ -1,8 +1,9 @@
-import { Box, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Fab, Tab, Tabs, Typography } from "@mui/material";
 import React from "react";
 import useFetch from "../../hooks/useFetch";
 import CardReservation from "../CardReservation/CardReservation";
-import ReservationForm from "./ReservationForm/ReservationForm";
+import AddIcon from "@mui/icons-material/Add";
+import { Link } from "react-router-dom";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -48,11 +49,13 @@ const ReservationsSection = () => {
   };
 
   const { data: pendient } = useFetch(
-    "http://localhost:4000/reservations/pendient"
+    "http://localhost:4000/reservations/pendient",
+    "GET"
   );
 
   const { data: denay } = useFetch(
-    "http://localhost:4000/reservations/denay"
+    "http://localhost:4000/reservations/denay",
+    "GET"
   );
 
   return (
@@ -72,6 +75,7 @@ const ReservationsSection = () => {
           {pendient.map((item) => {
             return (
               <CardReservation
+                key={item["client_name"]}
                 clientName={item["client_name"]}
                 hotel={item["hotel"]}
                 adults_count={item["adults_count"]}
@@ -84,7 +88,19 @@ const ReservationsSection = () => {
               />
             );
           })}
-          <ReservationForm />
+          <Link to={"/reservations/new"}>
+            <Fab
+              color='primary'
+              aria-label='add'
+              sx={{
+                position: "fixed",
+                bottom: 40,
+                right: 40,
+              }}
+            >
+              <AddIcon />
+            </Fab>
+          </Link>
         </Box>
       </TabPanel>
       <TabPanel value={value} index={1}>
@@ -92,6 +108,7 @@ const ReservationsSection = () => {
           {denay.map((item) => {
             return (
               <CardReservation
+                key={item["client_name"]}
                 clientName={item["client_name"]}
                 hotel={item["hotel"]}
                 adults_count={item["adults_count"]}

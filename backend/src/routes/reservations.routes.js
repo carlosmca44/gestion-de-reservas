@@ -16,7 +16,7 @@ router.get("/reservations/pendient", getPendientReservations);
 
 router.get("/reservations/denay", getDenayReservations);
 
-router.post("/reservations", createReservation);
+router.post("/reservations/new", createReservation);
 
 router.delete("/reservations", deleteReservation);
 
