@@ -81,6 +81,20 @@ const deleteReservation = async (req, res, next) => {
   }
 };
 
+const changePedientDenay = async (req, res, next) => {
+  const { client_name } = req.body;
+
+  try {
+    await pool.query(
+      "UPDATE reservations SET pendient = (SELECT denay FROM reservations WHERE client_name = $1), denay = (SELECT pendient FROM reservations WHERE client_name = $1) WHERE client_name = $1",
+      [client_name]
+    );
+    res.send("reservacion modificada");
+  } catch (error) {
+    next(error);
+  }
+};
+
 const updateReservation = async (req, res, next) => {
   const { client_name, booking } = req.body;
 
@@ -102,4 +116,5 @@ module.exports = {
   createReservation,
   deleteReservation,
   updateReservation,
+  changePedientDenay,
 };

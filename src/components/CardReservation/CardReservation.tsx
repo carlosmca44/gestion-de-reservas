@@ -6,7 +6,7 @@ import {
   CardHeader,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { MouseEventHandler } from "react";
 
 interface CardReservationProps {
   clientName: string;
@@ -17,7 +17,8 @@ interface CardReservationProps {
   entry_date: string;
   exit_date: string;
   bedroom_type: string;
-  denayPendient: boolean;
+  pendient: boolean;
+  denayPendientChange: MouseEventHandler;
 }
 
 const CardReservation: React.FC<CardReservationProps> = ({
@@ -29,7 +30,8 @@ const CardReservation: React.FC<CardReservationProps> = ({
   entry_date,
   exit_date,
   bedroom_type,
-  denayPendient,
+  pendient,
+  denayPendientChange,
 }) => {
   return (
     <Card sx={{ minWidth: 275, maxWidth: 300 }}>
@@ -47,10 +49,14 @@ const CardReservation: React.FC<CardReservationProps> = ({
       </CardContent>
       <CardActions>
         <Button size='small'>Editar</Button>
-        {denayPendient ? (
-          <Button size='small'>Denegada</Button>
+        {pendient ? (
+          <Button onClick={denayPendientChange} size='small'>
+            Denegada
+          </Button>
         ) : (
-          <Button size='small'>Pendiente</Button>
+          <Button onClick={denayPendientChange} size='small'>
+            Pendiente
+          </Button>
         )}
         <Button size='small'>Con Voucher</Button>
       </CardActions>

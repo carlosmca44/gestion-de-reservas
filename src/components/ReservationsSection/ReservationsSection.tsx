@@ -1,6 +1,5 @@
 import { Box, Fab, Tab, Tabs, Typography } from "@mui/material";
-import React from "react";
-import useFetch from "../../hooks/useFetch";
+import React, { useEffect, useState } from "react";
 import CardReservation from "../CardReservation/CardReservation";
 import AddIcon from "@mui/icons-material/Add";
 import { Link } from "react-router-dom";
@@ -48,15 +47,39 @@ const ReservationsSection = () => {
     setValue(newValue);
   };
 
-  const { data: pendient } = useFetch(
-    "http://localhost:4000/reservations/pendient",
-    "GET"
-  );
+  const [pendients, setPendients] = useState([]);
+  const [denay, setDenay] = useState([]);
 
-  const { data: denay } = useFetch(
-    "http://localhost:4000/reservations/denay",
-    "GET"
-  );
+  const fetchPendients = async () => {
+    const response = await fetch(
+      "http://localhost:4000/reservations/pendient"
+    );
+    const data = await response.json();
+    setPendients(data);
+  };
+
+  const fetchDenay = async () => {
+    const response = await fetch(
+      "http://localhost:4000/reservations/denay"
+    );
+    const data = await response.json();
+    setDenay(data);
+  };
+
+  useEffect(() => {
+    fetchPendients();
+    fetchDenay();
+  }, []);
+
+  const handleChangePendietDenay = async (id: string) => {
+    await fetch("http://localhost:4000/reservations/toDenay", {
+      method: "PATCH",
+      body: JSON.stringify({ client_name: id }),
+      headers: { "Content-Type": "application/json" },
+    });
+    fetchPendients();
+    fetchDenay();
+  };
 
   return (
     <Box sx={{ width: "100%" }} mt={2}>
@@ -72,7 +95,7 @@ const ReservationsSection = () => {
       </Box>
       <TabPanel value={value} index={0}>
         <Box display='flex' gap={3} flexWrap='wrap'>
-          {pendient.map((item) => {
+          {pendients.map((item) => {
             return (
               <CardReservation
                 key={item["client_name"]}
@@ -84,7 +107,10 @@ const ReservationsSection = () => {
                 entry_date={item["entry_date"]}
                 exit_date={item["exit_date"]}
                 bedroom_type={item["bedroom_type"]}
-                denayPendient={true}
+                pendient={item["pendient"]}
+                denayPendientChange={() =>
+                  handleChangePendietDenay(item["client_name"])
+                }
               />
             );
           })}
@@ -117,7 +143,10 @@ const ReservationsSection = () => {
                 entry_date={item["entry_date"]}
                 exit_date={item["exit_date"]}
                 bedroom_type={item["bedroom_type"]}
-                denayPendient={true}
+                pendient={item["pendient"]}
+                denayPendientChange={() =>
+                  handleChangePendietDenay(item["client_name"])
+                }
               />
             );
           })}
