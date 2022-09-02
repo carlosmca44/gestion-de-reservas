@@ -18,7 +18,10 @@ interface CardReservationProps {
   exit_date: string;
   bedroom_type: string;
   pendient: boolean;
+  voucher: boolean;
   denayPendientChange: MouseEventHandler;
+  voucherChange?: MouseEventHandler;
+  deleteChange?: MouseEventHandler;
 }
 
 const CardReservation: React.FC<CardReservationProps> = ({
@@ -31,7 +34,10 @@ const CardReservation: React.FC<CardReservationProps> = ({
   exit_date,
   bedroom_type,
   pendient,
+  voucher,
   denayPendientChange,
+  voucherChange,
+  deleteChange,
 }) => {
   return (
     <Card sx={{ minWidth: 275, maxWidth: 300 }}>
@@ -48,17 +54,34 @@ const CardReservation: React.FC<CardReservationProps> = ({
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size='small'>Editar</Button>
-        {pendient ? (
-          <Button onClick={denayPendientChange} size='small'>
-            Denegada
-          </Button>
+        {voucher ? (
+          <>
+            <Button size='small'>Sin Pago</Button>
+            <Button size='small'>Pagado</Button>
+          </>
+        ) : pendient ? (
+          <>
+            <Button onClick={denayPendientChange} size='small'>
+              Denegada
+            </Button>
+            <Button size='small' onClick={voucherChange}>
+              Voucher
+            </Button>
+            <Button size='small' onClick={deleteChange}>
+              Eliminar
+            </Button>
+          </>
         ) : (
-          <Button onClick={denayPendientChange} size='small'>
-            Pendiente
-          </Button>
+          <>
+            <Button size='small'>Editar</Button>
+            <Button onClick={denayPendientChange} size='small'>
+              Pendiente
+            </Button>
+            <Button size='small' onClick={deleteChange}>
+              Eliminar
+            </Button>
+          </>
         )}
-        <Button size='small'>Con Voucher</Button>
       </CardActions>
     </Card>
   );

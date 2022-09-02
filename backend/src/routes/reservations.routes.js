@@ -7,6 +7,8 @@ const {
   getPendientReservations,
   getDenayReservations,
   changePedientDenay,
+  getVoucherDone,
+  setVoucher,
 } = require("../controllers/reservations.controller");
 
 const router = Router();
@@ -24,5 +26,9 @@ router.delete("/reservations", deleteReservation);
 router.put("/reservations", updateReservation);
 
 router.patch("/reservations/toDenay", changePedientDenay);
+
+router.patch("/reservations/voucher", setVoucher);
+
+router.get("/voucher/done", getVoucherDone);
 
 module.exports = router;

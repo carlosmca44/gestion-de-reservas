@@ -81,6 +81,26 @@ const ReservationsSection = () => {
     fetchDenay();
   };
 
+  const handleChangeVoucher = async (id: string) => {
+    await fetch("http://localhost:4000/reservations/voucher", {
+      method: "PATCH",
+      body: JSON.stringify({ client_name: id }),
+      headers: { "Content-Type": "application/json" },
+    });
+    fetchPendients();
+    fetchDenay();
+  };
+
+  const handleDelete = async (id: string) => {
+    await fetch("http://localhost:4000/reservations", {
+      method: "DELETE",
+      body: JSON.stringify({ client_name: id }),
+      headers: { "Content-Type": "application/json" },
+    });
+    fetchPendients();
+    fetchDenay();
+  };
+
   return (
     <Box sx={{ width: "100%" }} mt={2}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -108,9 +128,16 @@ const ReservationsSection = () => {
                 exit_date={item["exit_date"]}
                 bedroom_type={item["bedroom_type"]}
                 pendient={item["pendient"]}
+                voucher={item["voucher"]}
                 denayPendientChange={() =>
                   handleChangePendietDenay(item["client_name"])
                 }
+                voucherChange={() =>
+                  handleChangeVoucher(item["client_name"])
+                }
+                deleteChange={() => {
+                  handleDelete(item["client_name"]);
+                }}
               />
             );
           })}
@@ -144,9 +171,13 @@ const ReservationsSection = () => {
                 exit_date={item["exit_date"]}
                 bedroom_type={item["bedroom_type"]}
                 pendient={item["pendient"]}
+                voucher={item["voucher"]}
                 denayPendientChange={() =>
                   handleChangePendietDenay(item["client_name"])
                 }
+                deleteChange={() => {
+                  handleDelete(item["client_name"]);
+                }}
               />
             );
           })}

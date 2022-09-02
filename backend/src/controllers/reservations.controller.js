@@ -95,6 +95,20 @@ const changePedientDenay = async (req, res, next) => {
   }
 };
 
+const setVoucher = async (req, res, next) => {
+  const { client_name } = req.body;
+
+  try {
+    await pool.query(
+      "UPDATE reservations SET pendient = false, denay = false, voucher = true WHERE client_name = $1",
+      [client_name]
+    );
+    res.send("con voucher");
+  } catch (error) {
+    next(error);
+  }
+};
+
 const updateReservation = async (req, res, next) => {
   const { client_name, booking } = req.body;
 
@@ -109,6 +123,19 @@ const updateReservation = async (req, res, next) => {
   }
 };
 
+//Voucher
+
+const getVoucherDone = async (req, res, next) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM reservations WHERE voucher = true"
+    );
+    res.json(result.rows);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAllReservations,
   getPendientReservations,
@@ -117,4 +144,6 @@ module.exports = {
   deleteReservation,
   updateReservation,
   changePedientDenay,
+  getVoucherDone,
+  setVoucher,
 };
