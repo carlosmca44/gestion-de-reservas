@@ -119,18 +119,68 @@ const updateReservation = async (req, res, next) => {
     );
     res.send("reservacion modificada");
   } catch (error) {
-    res.send("no se pudo modificar");
+    next(error);
   }
 };
 
 //Voucher
 
-const getVoucherDone = async (req, res, next) => {
+const getVoucherDone = async (_req, res, next) => {
   try {
     const result = await pool.query(
-      "SELECT * FROM reservations WHERE voucher = true"
+      "SELECT * FROM reservations WHERE send_not_payed = false AND payed = false AND voucher = true"
     );
     res.json(result.rows);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getNotPayedVoucher = async (_req, res, next) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM reservations WHERE send_not_payed = true"
+    );
+    res.json(result.rows);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getPayedVoucher = async (_req, res, next) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM reservations WHERE payed = true"
+    );
+    res.json(result.rows);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const setNotPayed = async (req, res, next) => {
+  const { client_name } = req.body;
+
+  try {
+    await pool.query(
+      "UPDATE reservations SET send_not_payed = true WHERE client_name = $1",
+      [client_name]
+    );
+    res.send("enviado sin pago");
+  } catch (error) {
+    next(error);
+  }
+};
+
+const setPayed = async (req, res, next) => {
+  const { client_name } = req.body;
+
+  try {
+    await pool.query(
+      "UPDATE reservations SET send_not_payed = false, payed = true WHERE client_name = $1",
+      [client_name]
+    );
+    res.send("pagado");
   } catch (error) {
     next(error);
   }
@@ -146,4 +196,8 @@ module.exports = {
   changePedientDenay,
   getVoucherDone,
   setVoucher,
+  getNotPayedVoucher,
+  getPayedVoucher,
+  setNotPayed,
+  setPayed,
 };

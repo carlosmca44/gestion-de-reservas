@@ -46,7 +46,8 @@ const VoucherSection = () => {
   };
 
   const [voucher, setVoucher] = useState([]);
-  // const [denay, setDenay] = useState([]);
+  const [sendNotPayed, setSendNotPayed] = useState([]);
+  const [payed, setPayed] = useState([]);
 
   const fetchVoucherDone = async () => {
     const response = await fetch(
@@ -56,27 +57,57 @@ const VoucherSection = () => {
     setVoucher(data);
   };
 
-  // const fetchDenay = async () => {
-  //   const response = await fetch(
-  //     "http://localhost:4000/reservations/denay"
-  //   );
-  //   const data = await response.json();
-  //   setDenay(data);
-  // };
+  const fetchSendNotPayed = async () => {
+    const response = await fetch(
+      "http://localhost:4000/voucher/notPayed"
+    );
+    const data = await response.json();
+    setSendNotPayed(data);
+  };
+
+  const fetchPayed = async () => {
+    const response = await fetch(
+      "http://localhost:4000/voucher/payed"
+    );
+    const data = await response.json();
+    setPayed(data);
+  };
 
   useEffect(() => {
     fetchVoucherDone();
-    // fetchDenay();
+    fetchSendNotPayed();
+    fetchPayed();
   }, []);
 
-  const handleChangePendietDenay = async (id: string) => {
-    await fetch("http://localhost:4000/reservations/toDenay", {
+  const handleChangeSendNotPayed = async (id: string) => {
+    await fetch("http://localhost:4000/voucher/notPayed", {
       method: "PATCH",
       body: JSON.stringify({ client_name: id }),
       headers: { "Content-Type": "application/json" },
     });
     fetchVoucherDone();
-    // fetchDenay();
+    fetchSendNotPayed();
+    fetchPayed();
+  };
+
+  const handleChangePayed = async (id: string) => {
+    await fetch("http://localhost:4000/voucher/payed", {
+      method: "PATCH",
+      body: JSON.stringify({ client_name: id }),
+      headers: { "Content-Type": "application/json" },
+    });
+    fetchVoucherDone();
+    fetchSendNotPayed();
+    fetchPayed();
+  };
+
+  const handleDelete = async (id: string) => {
+    await fetch("http://localhost:4000/reservations", {
+      method: "DELETE",
+      body: JSON.stringify({ client_name: id }),
+      headers: { "Content-Type": "application/json" },
+    });
+    fetchPayed();
   };
 
   return (
@@ -89,7 +120,7 @@ const VoucherSection = () => {
         >
           <Tab label='Listos' {...a11yProps(0)} />
           <Tab label='Pendientes a pago' {...a11yProps(1)} />
-          <Tab label='Pagados' {...a11yProps(1)} />
+          <Tab label='Pagados' {...a11yProps(2)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -108,8 +139,13 @@ const VoucherSection = () => {
                 bedroom_type={item["bedroom_type"]}
                 pendient={item["pendient"]}
                 voucher={item["voucher"]}
-                denayPendientChange={() =>
-                  handleChangePendietDenay(item["client_name"])
+                payed={item["payed"]}
+                send_not_payed={item["send_not_payed"]}
+                notPayedChange={() =>
+                  handleChangeSendNotPayed(item["client_name"])
+                }
+                payedChange={() =>
+                  handleChangePayed(item["client_name"])
                 }
               />
             );
@@ -117,10 +153,54 @@ const VoucherSection = () => {
         </Box>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        sin pago
+        <Box display='flex' gap={3} flexWrap='wrap'>
+          {sendNotPayed.map((item) => {
+            return (
+              <CardReservation
+                key={item["client_name"]}
+                clientName={item["client_name"]}
+                hotel={item["hotel"]}
+                adults_count={item["adults_count"]}
+                child_count={item["child_count"]}
+                inf_count={item["inf_count"]}
+                entry_date={item["entry_date"]}
+                exit_date={item["exit_date"]}
+                bedroom_type={item["bedroom_type"]}
+                pendient={item["pendient"]}
+                voucher={item["voucher"]}
+                payed={item["payed"]}
+                send_not_payed={item["send_not_payed"]}
+                payedChange={() =>
+                  handleChangePayed(item["client_name"])
+                }
+              />
+            );
+          })}
+        </Box>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        pagados
+        <Box display='flex' gap={3} flexWrap='wrap'>
+          {payed.map((item) => {
+            return (
+              <CardReservation
+                key={item["client_name"]}
+                clientName={item["client_name"]}
+                hotel={item["hotel"]}
+                adults_count={item["adults_count"]}
+                child_count={item["child_count"]}
+                inf_count={item["inf_count"]}
+                entry_date={item["entry_date"]}
+                exit_date={item["exit_date"]}
+                bedroom_type={item["bedroom_type"]}
+                pendient={item["pendient"]}
+                voucher={item["voucher"]}
+                payed={item["payed"]}
+                send_not_payed={item["send_not_payed"]}
+                deleteChange={() => handleDelete(item["client_name"])}
+              />
+            );
+          })}
+        </Box>
       </TabPanel>
     </Box>
   );

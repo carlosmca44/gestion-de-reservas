@@ -9,9 +9,15 @@ const {
   changePedientDenay,
   getVoucherDone,
   setVoucher,
+  getNotPayedVoucher,
+  getPayedVoucher,
+  setNotPayed,
+  setPayed,
 } = require("../controllers/reservations.controller");
 
 const router = Router();
+
+//Reservations
 
 router.get("/reservations", getAllReservations);
 
@@ -29,6 +35,16 @@ router.patch("/reservations/toDenay", changePedientDenay);
 
 router.patch("/reservations/voucher", setVoucher);
 
+//Voucher
+
 router.get("/voucher/done", getVoucherDone);
+
+router.get("/voucher/notPayed", getNotPayedVoucher);
+
+router.get("/voucher/payed", getPayedVoucher);
+
+router.patch("/voucher/notPayed", setNotPayed);
+
+router.patch("/voucher/payed", setPayed);
 
 module.exports = router;
