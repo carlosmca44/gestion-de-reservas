@@ -21,11 +21,13 @@ interface CardReservationProps {
   voucher: boolean;
   payed?: boolean;
   send_not_payed?: boolean;
+  canceled?: boolean;
   denayPendientChange?: MouseEventHandler;
   voucherChange?: MouseEventHandler;
   deleteChange?: MouseEventHandler;
   notPayedChange?: MouseEventHandler;
   payedChange?: MouseEventHandler;
+  canceledChange?: MouseEventHandler;
 }
 
 const CardReservation: React.FC<CardReservationProps> = ({
@@ -41,11 +43,13 @@ const CardReservation: React.FC<CardReservationProps> = ({
   voucher,
   payed,
   send_not_payed,
+  canceled,
   denayPendientChange,
   voucherChange,
   deleteChange,
   notPayedChange,
   payedChange,
+  canceledChange,
 }) => {
   return (
     <Card sx={{ minWidth: 275, maxWidth: 300 }}>
@@ -68,8 +72,17 @@ const CardReservation: React.FC<CardReservationProps> = ({
               <Button size='small' onClick={payedChange}>
                 Pagado
               </Button>
+              <Button size='small' onClick={canceledChange}>
+                Cancelar
+              </Button>
             </>
           ) : payed ? (
+            <>
+              <Button size='small' onClick={deleteChange}>
+                Eliminar
+              </Button>
+            </>
+          ) : canceled ? (
             <>
               <Button size='small' onClick={deleteChange}>
                 Eliminar
@@ -82,6 +95,9 @@ const CardReservation: React.FC<CardReservationProps> = ({
               </Button>
               <Button size='small' onClick={payedChange}>
                 Pagado
+              </Button>
+              <Button size='small' onClick={canceledChange}>
+                Cancelar
               </Button>
             </>
           )

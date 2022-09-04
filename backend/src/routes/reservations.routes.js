@@ -13,6 +13,8 @@ const {
   getPayedVoucher,
   setNotPayed,
   setPayed,
+  setCanceled,
+  getCanceledVoucher,
 } = require("../controllers/reservations.controller");
 
 const router = Router();
@@ -43,8 +45,12 @@ router.get("/voucher/notPayed", getNotPayedVoucher);
 
 router.get("/voucher/payed", getPayedVoucher);
 
+router.get("/voucher/canceled", getCanceledVoucher);
+
 router.patch("/voucher/notPayed", setNotPayed);
 
 router.patch("/voucher/payed", setPayed);
+
+router.patch("/voucher/canceled", setCanceled);
 
 module.exports = router;

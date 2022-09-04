@@ -158,6 +158,17 @@ const getPayedVoucher = async (_req, res, next) => {
   }
 };
 
+const getCanceledVoucher = async (_req, res, next) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM reservations WHERE canceled = true"
+    );
+    res.json(result.rows);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const setNotPayed = async (req, res, next) => {
   const { client_name } = req.body;
 
@@ -186,6 +197,20 @@ const setPayed = async (req, res, next) => {
   }
 };
 
+const setCanceled = async (req, res, next) => {
+  const { client_name } = req.body;
+
+  try {
+    await pool.query(
+      "UPDATE reservations SET canceled = true, send_not_payed = false WHERE client_name = $1",
+      [client_name]
+    );
+    res.send("cancelada reservacion");
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAllReservations,
   getPendientReservations,
@@ -198,6 +223,8 @@ module.exports = {
   setVoucher,
   getNotPayedVoucher,
   getPayedVoucher,
+  getCanceledVoucher,
   setNotPayed,
   setPayed,
+  setCanceled,
 };

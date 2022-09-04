@@ -48,6 +48,7 @@ const VoucherSection = () => {
   const [voucher, setVoucher] = useState([]);
   const [sendNotPayed, setSendNotPayed] = useState([]);
   const [payed, setPayed] = useState([]);
+  const [canceled, setCanceled] = useState([]);
 
   const fetchVoucherDone = async () => {
     const response = await fetch(
@@ -73,10 +74,19 @@ const VoucherSection = () => {
     setPayed(data);
   };
 
+  const fetchCanceled = async () => {
+    const response = await fetch(
+      "http://localhost:4000/voucher/canceled"
+    );
+    const data = await response.json();
+    setCanceled(data);
+  };
+
   useEffect(() => {
     fetchVoucherDone();
     fetchSendNotPayed();
     fetchPayed();
+    fetchCanceled();
   }, []);
 
   const handleChangeSendNotPayed = async (id: string) => {
@@ -101,6 +111,16 @@ const VoucherSection = () => {
     fetchPayed();
   };
 
+  const handleChangeCanceled = async (id: string) => {
+    await fetch("http://localhost:4000/voucher/canceled", {
+      method: "PATCH",
+      body: JSON.stringify({ client_name: id }),
+      headers: { "Content-Type": "application/json" },
+    });
+    fetchSendNotPayed();
+    fetchCanceled();
+  };
+
   const handleDelete = async (id: string) => {
     await fetch("http://localhost:4000/reservations", {
       method: "DELETE",
@@ -121,6 +141,7 @@ const VoucherSection = () => {
           <Tab label='Listos' {...a11yProps(0)} />
           <Tab label='Pendientes a pago' {...a11yProps(1)} />
           <Tab label='Pagados' {...a11yProps(2)} />
+          <Tab label='Cancelados' {...a11yProps(3)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -139,14 +160,13 @@ const VoucherSection = () => {
                 bedroom_type={item["bedroom_type"]}
                 pendient={item["pendient"]}
                 voucher={item["voucher"]}
-                payed={item["payed"]}
-                send_not_payed={item["send_not_payed"]}
                 notPayedChange={() =>
                   handleChangeSendNotPayed(item["client_name"])
                 }
                 payedChange={() =>
                   handleChangePayed(item["client_name"])
                 }
+                canceledChange={() => handleChangeCanceled}
               />
             );
           })}
@@ -168,10 +188,12 @@ const VoucherSection = () => {
                 bedroom_type={item["bedroom_type"]}
                 pendient={item["pendient"]}
                 voucher={item["voucher"]}
-                payed={item["payed"]}
                 send_not_payed={item["send_not_payed"]}
                 payedChange={() =>
                   handleChangePayed(item["client_name"])
+                }
+                canceledChange={() =>
+                  handleChangeCanceled(item["client_name"])
                 }
               />
             );
@@ -196,6 +218,31 @@ const VoucherSection = () => {
                 voucher={item["voucher"]}
                 payed={item["payed"]}
                 send_not_payed={item["send_not_payed"]}
+                deleteChange={() => handleDelete(item["client_name"])}
+              />
+            );
+          })}
+        </Box>
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        <Box display='flex' gap={3} flexWrap='wrap'>
+          {canceled.map((item) => {
+            return (
+              <CardReservation
+                key={item["client_name"]}
+                clientName={item["client_name"]}
+                hotel={item["hotel"]}
+                adults_count={item["adults_count"]}
+                child_count={item["child_count"]}
+                inf_count={item["inf_count"]}
+                entry_date={item["entry_date"]}
+                exit_date={item["exit_date"]}
+                bedroom_type={item["bedroom_type"]}
+                pendient={item["pendient"]}
+                voucher={item["voucher"]}
+                payed={item["payed"]}
+                send_not_payed={item["send_not_payed"]}
+                canceled={item["canceled"]}
                 deleteChange={() => handleDelete(item["client_name"])}
               />
             );
